@@ -14,7 +14,6 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  // Redirect if already authenticated
   if (user) {
     router.push("/");
     return null;
@@ -27,9 +26,10 @@ export default function Register() {
     const photoURL = form.photoURL.value;
     const email = form.email.value;
     const password = form.password.value;
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     if (!passwordRegex.test(password)) {
-      setError("Password must contain one uppercase, one lowercase and be at least 6 characters long.");
+      setError("Password must contain one uppercase, one lowercase, and be at least 6 characters long.");
       return;
     }
 
@@ -38,64 +38,83 @@ export default function Register() {
         updateUser({ displayName: name, photoURL: photoURL })
           .then(() => {
             e.target.reset();
-
-            sendEmailVerification(result.user)
-              .then(() => {
-                return signOut(getAuth());
-              })
-              .then(() => {
-                toast.success("Registration successful! Please verify your email and then login.");
-                router.push("/");
-              })
-              .catch((error) => console.log(error));
+            toast.success("Registration successful! You can now login.");
+            router.push("/auth/login"); // redirect to login or homepage
           })
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch((err) => console.error(err));
       })
-      .catch((error) => {
-        setError("Email already in use.");
-        console.log(error.code, error.message);
-      });
+
+      .catch(() => setError("Email already in use."));
   };
 
   return (
-    <div className="min-h-[700px] flex justify-center items-center bg-[url('https://images.unsplash.com/photo-1533460004989-cef01064af7e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170')] bg-cover bg-center px-4 md:px-0">
-      <div className="card w-full max-w-sm shrink-0 bg-[#78dd7900] backdrop-blur-xl shadow md:max-w-md">
-        <h2 className="text-center mt-5 font-bold text-white text-lg md:text-xl">Register Your Account</h2>
-        <form onSubmit={handleRegister} className="card-body md:px-6">
-          <fieldset className="fieldset *:w-full">
-            <input type="text" name="name" className="input placeholder-gray-500 input-sm md:input-md" placeholder="Name" required />
-            <input type="text" name="photoURL" className="input placeholder-gray-500 input-sm md:input-md" placeholder="Photo-URL" required />
-            <input type="email" name="email" className="input placeholder-gray-500 input-sm md:input-md" placeholder="Email" required />
-            {/* password */}
-            <div className="relative w-full">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                className="input placeholder-gray-500 input-bordered input-sm md:input-md w-full pr-10"
-                placeholder="Password"
-                required
-              />
-              {/* toggle Icon */}
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-[16px] hover:text-gray-700">
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-            <p className="text-red-500 text-xs md:text-sm">{error}</p>
+    <div className="py-20 flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 md:p-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">Create Account</h2>
+          <p className="text-gray-500 mt-2 text-sm md:text-base">Fill in your details to register</p>
+        </div>
 
-            <button type="submit" className="btn btn-neutral mt-4 bg-[#00a700] text-white border-none shadow-none btn-sm md:btn-md">
-              Register
+        {/* Form */}
+        <form onSubmit={handleRegister} className="space-y-5">
+          {/* Name */}
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2D336B] transition"
+            required
+          />
+
+          {/* Photo URL */}
+          <input
+            type="text"
+            name="photoURL"
+            placeholder="Photo URL"
+            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2D336B] transition"
+            required
+          />
+
+          {/* Email */}
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2D336B] transition"
+            required
+          />
+
+          {/* Password */}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#2D336B] transition"
+              required
+            />
+            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition">
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
-          </fieldset>
+          </div>
 
-          <p className="text-center mt-2 text-sm text-gray-100 md:text-base">
-            Already have an account?{" "}
-            <Link href="/auth/login" className="text-[#97ff97] underline font-medium">
-              Login
-            </Link>
-          </p>
+          {/* Error Message */}
+          {error && <p className="text-red-500 text-sm font-semibold">{error}</p>}
+
+          {/* Register Button */}
+          <button type="submit" className="w-full bg-[#2D336B] hover:bg-black text-white font-bold py-3 rounded-xl transition">
+            Register
+          </button>
         </form>
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-gray-600 text-sm md:text-base">
+          Already have an account?{" "}
+          <Link href="/auth/login" className="text-[#2D336B] font-semibold hover:underline underline-offset-2">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );

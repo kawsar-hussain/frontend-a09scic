@@ -16,13 +16,11 @@ export default function Login() {
   const [error, setError] = useState("");
   const emailRef = useRef();
 
-  // Redirect if already authenticated
   if (user) {
     router.push("/");
     return null;
   }
 
-  // login with email & password
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -31,122 +29,111 @@ export default function Login() {
 
     logIn(email, password)
       .then((result) => {
-        const user = result.user;
-        // require verified email
-        if (!user.emailVerified) {
-          // sign out any auto-signed-in user
-          signOut(getAuth())
-            .then(() => {
-              toast.error("Please verify your email before logging in.");
-            })
-            .catch((err) => console.error(err));
+        if (!result.user.emailVerified) {
+          signOut(getAuth()).then(() => toast.error("Please verify your email."));
           return;
         }
-        toast.success("Successfully logged in.");
+        toast.success("Logged in successfully!");
         router.push("/");
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        setError("Email or password is incorrect");
-      });
+      .catch(() => setError("Invalid email or password."));
   };
 
-  // login with google
   const handleGoogleLogin = () => {
-    const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        // Google accounts are typically verified, but check just in case
-        if (!user.emailVerified) {
-          signOut(getAuth())
-            .then(() => toast.error("Please verify your email before logging in."))
-            .catch((err) => console.error(err));
-          return;
-        }
-        router.push("/");
-      })
-      .catch((error) => {
-        console.error("Google sign-in error:", error);
-        setError("Google login failed");
-      });
+    signInWithPopup(getAuth(), provider)
+      .then(() => router.push("/"))
+      .catch(() => setError("Google login failed."));
   };
 
   const handleForgetPassword = () => {
-    const auth = getAuth(app);
     const email = emailRef.current.value;
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        email ? toast.info("Password reset email sent! Check your inbox.") : "";
-      })
-      .catch((error) => {
-        console.log(error);
-        email === "" ? toast.info("Please enter your email.") : toast.info("Please enter a valid email.");
-      });
+    sendPasswordResetEmail(getAuth(app), email)
+      .then(() => email && toast.info("Reset email sent!"))
+      .catch(() => toast.error("Enter a valid email."));
   };
 
   return (
-    <div className="min-h-[700px] flex justify-center items-center bg-[url('https://images.unsplash.com/photo-1533460004989-cef01064af7e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170')] bg-cover bg-center px-4 md:px-0">
-      <div className="card w-full max-w-sm shrink-0 bg-[#78ff7800] backdrop-blur-xl shadow md:max-w-md">
-        <h2 className="text-center mt-5 font-bold text-white text-lg md:text-xl">Login Your Account </h2>
-        <form onSubmit={handleLogin} className="card-body md:px-6">
-          <fieldset className="fieldset *:w-full">
-            {/* email */}
-            <label className="label text-sm md:text-gray-100">Email</label>
-            <input type="email" name="email" className="input placeholder-gray-500 input-sm md:input-md" placeholder="Email" ref={emailRef} required />
-            {/* password */}
-            <label className="label text-sm md:text-gray-100">Password</label>
-            <div className="relative w-full">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                className="input placeholder-gray-500 input-bordered input-sm md:input-md w-full pr-10 "
-                placeholder="Password"
-                required
-              />
-              {/* Toggle Icon */}
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-[14px] md:text-[16px] hover:text-gray-700">
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-            <div onClick={handleForgetPassword}>
-              <a className="link link-hover text-sm md:text-gray-100">Forgot password?</a>
-            </div>
-            {error && <p className="text-red-500 text-xs md:text-sm">{error}</p>}
-            <button type="submit" className="btn btn-neutral mt-4 bg-[#00a700] text-white border-none shadow-none btn-sm md:btn-md">
-              Login
-            </button>
-          </fieldset>
-          <p className="text-center text-gray-100 mt-2 text-sm md:text-base">
-            Don't have an account? {""}
-            <Link href="/auth/register" className="text-[#97ff97] underline  font-medium">
-              Register
-            </Link>
-          </p>
-        </form>
-        <div className="card-body pt-0 md:px-6">
-          <div className="flex items-center gap-2">
-            <hr className="flex-1 border-gray-200" />
-            <span className="text-gray-200 text-center text-xs md:text-sm">or</span>
-            <hr className="flex-1 border-gray-200" />
+    <div className="py-20 flex items-center justify-center bg-gradient-to-b bg-gray-50 px-4">
+      <div className="w-full max-w-md bg-white border border-gray-200 rounded-3xl p-10 shadow-xl">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-extrabold text-gray-900">Welcome Back</h1>
+          <p className="text-gray-500 mt-2 text-sm">Sign in to continue to your account</p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleLogin} className="space-y-6">
+          {/* Email */}
+          <div className="relative">
+            <input
+              type="email"
+              name="email"
+              ref={emailRef}
+              placeholder="Email Address"
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2D336B] transition"
+              required
+            />
           </div>
 
-          <button className="btn bg-white text-black shadow-none border-[#e5e5e5] h-9" onClick={handleGoogleLogin}>
-            <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              <g>
-                <path d="m0 0H512V512H0" fill="#fff"></path>
-                <path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path>
-                <path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path>
-                <path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path>
-                <path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path>
-              </g>
-            </svg>
-            Login with Google
-          </button>
+          {/* Password */}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-[#2D336B] transition"
+              required
+            />
+            {/* Eye toggle */}
+            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-700 transition">
+              {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+            </button>
+          </div>
+
+          {/* Forgot Password */}
+          <div className="text-right mt-1">
+            <button type="button" onClick={handleForgetPassword} className="text-xs text-blue-600 hover:underline">
+              Forgot Password?
+            </button>
+          </div>
+
+          {/* Error */}
+          {error && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-semibold">{error}</div>}
+
+          {/* Submit */}
+          <button className="w-full bg-[#2D336B] hover:bg-black text-white font-bold py-3 rounded-xl transition">Sign In</button>
+        </form>
+
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <hr className="flex-grow border-gray-300" />
+          <span className="px-3 text-gray-400 text-sm uppercase font-semibold">or</span>
+          <hr className="flex-grow border-gray-300" />
         </div>
+
+        {/* Google Login */}
+        <button onClick={handleGoogleLogin} className="flex items-center justify-center w-full border border-gray-300 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition">
+          <FaEyeSlash className="hidden" />
+          <svg aria-label="Google logo" className="mr-1" width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <g>
+              <path d="m0 0H512V512H0" fill="#fff"></path>
+              <path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path>
+              <path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path>
+              <path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path>
+              <path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path>
+            </g>
+          </svg>
+          Continue with Google
+        </button>
+
+        {/* Register Link */}
+        <p className="mt-8 text-center text-gray-600 text-sm">
+          New here?{" "}
+          <Link href="/auth/register" className="text-[#2D336B] font-semibold hover:underline underline-offset-2">
+            Create an account
+          </Link>
+        </p>
       </div>
     </div>
   );
