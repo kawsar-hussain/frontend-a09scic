@@ -1,0 +1,39 @@
+/* Background color classes */
+.bg-green-1 {
+  background-color: rgb(4, 57, 21);
+}
+.bg-green-2 {
+  background-color: rgb(76, 118, 59);
+}
+.bg-green-3 {
+  background-color: rgb(176, 206, 136);
+}
+.bg-yellow-1 {
+  background-color: rgb(255, 253, 143);
+}
+.bg-dark-1 {
+  background-color: #f6f6f6;
+}
+.bg-dark-2 {
+  background-color: #cccccc;
+}
+
+/* Text color classes */
+.text-green-1 {
+  color: rgb(2, 118, 39);
+}
+.text-green-2 {
+  color: rgb(76, 118, 59);
+}
+.text-green-3 {
+  color: rgb(176, 206, 136);
+}
+.text-yellow-1 {
+  color: rgb(255, 253, 143);
+}
+.text-dark-1 {
+  color: #f6f6f6;
+}
+.text-dark-2 {
+  color: #cccccc;
+}
