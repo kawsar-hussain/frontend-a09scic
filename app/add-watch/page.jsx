@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import React from "react";
+import { toast } from "react-toastify";
 
 const AddWatch = () => {
   const handleSubmit = (e) => {
@@ -24,7 +25,9 @@ const AddWatch = () => {
     console.log(formData);
     axios.post("https://scic12a09.vercel.app/add-watch", formData).then((res) => {
       console.log(res);
+      toast.success("Watch added successfully.");
     });
+    form.reset();
   };
 
   return (

@@ -4,92 +4,28 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoMdSearch, IoMdFunnel, IoMdOptions } from "react-icons/io";
+import Loader from "src/Loader";
 
 const Collections = () => {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://scic12a09.vercel.app/watch-collection")
       .then((res) => {
         setItems(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.error("Error fetching products:", err);
+        setLoading(false);
       });
   }, []);
 
   console.log(items);
 
-  // const initialWatches = [
-  //   {
-  //     id: 1,
-  //     watchName: "Submariner",
-  //     brand: "Rolex",
-  //     price: 9500,
-  //     category: "Luxury",
-  //     movementType: "Automatic",
-  //     caseMaterial: "Steel",
-  //     dialColor: "Black",
-  //     waterResistance: "300m",
-  //     stockQuantity: 5,
-  //     productImage: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1000",
-  //   },
-  //   {
-  //     id: 2,
-  //     watchName: "Speedmaster",
-  //     brand: "Omega",
-  //     price: 6200,
-  //     category: "Sport",
-  //     movementType: "Manual",
-  //     caseMaterial: "Titanium",
-  //     dialColor: "Blue",
-  //     waterResistance: "50m",
-  //     stockQuantity: 8,
-  //     productImage: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1000",
-  //   },
-  //   {
-  //     id: 3,
-  //     watchName: "Seamaster",
-  //     brand: "Omega",
-  //     price: 5400,
-  //     category: "Luxury",
-  //     movementType: "Automatic",
-  //     caseMaterial: "Steel",
-  //     dialColor: "White",
-  //     waterResistance: "150m",
-  //     stockQuantity: 3,
-  //     productImage: "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=1000",
-  //   },
-  //   {
-  //     id: 4,
-  //     watchName: "Carrera",
-  //     brand: "Tag Heuer",
-  //     price: 3200,
-  //     category: "Sport",
-  //     movementType: "Automatic",
-  //     caseMaterial: "Steel",
-  //     dialColor: "Black",
-  //     waterResistance: "100m",
-  //     stockQuantity: 12,
-  //     productImage: "https://images.unsplash.com/photo-1526045431048-f857369aba09?q=80&w=1000",
-  //   },
-  //   {
-  //     id: 5,
-  //     watchName: "Black Bay",
-  //     brand: "Tudor",
-  //     price: 3800,
-  //     category: "Vintage",
-  //     movementType: "Automatic",
-  //     caseMaterial: "Bronze",
-  //     dialColor: "Brown",
-  //     waterResistance: "200m",
-  //     stockQuantity: 4,
-  //     productImage: "https://images.unsplash.com/photo-1508685096489-7a669f1bd446?q=80&w=1000",
-  //   },
-  // ];
-
-  // const [watches] = useState(initialWatches);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterColor, setFilterColor] = useState("All");
@@ -103,6 +39,10 @@ const Collections = () => {
 
     return matchesSearch && matchesCategory && matchesColor && matchesPrice;
   });
+
+  if (loading) {
+    return <Loader></Loader>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 lg:p-10">
@@ -199,9 +139,9 @@ const Collections = () => {
             {filteredWatches.map((watch) => (
               <div key={watch.id} className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-xl transition overflow-hidden group">
                 <Link href={""}>
-                  <div className="relative overflow-hidden">
-                    <img src={watch.productImage} alt={watch.watchName} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute top-2 right-2 bg-[#2D336B] text-white text-[10px] px-2 py-1 rounded uppercase">{watch.category}</div>
+                  <div className="group relative w-full overflow-hidden aspect-[4/3] rounded-sm bg-neutral-900">
+                    <img src={watch.productImage} alt={watch.watchName} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                    <div className="absolute top-3 right-3 bg-[#2D336B] text-white text-[10px] font-semibold tracking-wider px-2 py-1 rounded-sm uppercase shadow-md">{watch.category}</div>
                   </div>
                 </Link>
 
