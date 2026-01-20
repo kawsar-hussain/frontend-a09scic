@@ -1,85 +1,101 @@
 "use client";
 
+import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdSearch, IoMdFunnel, IoMdOptions } from "react-icons/io";
 
 const Collections = () => {
-  const initialWatches = [
-    {
-      id: 1,
-      watchName: "Submariner",
-      brand: "Rolex",
-      price: 9500,
-      category: "Luxury",
-      movementType: "Automatic",
-      caseMaterial: "Steel",
-      dialColor: "Black",
-      waterResistance: "300m",
-      stockQuantity: 5,
-      productImage: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1000",
-    },
-    {
-      id: 2,
-      watchName: "Speedmaster",
-      brand: "Omega",
-      price: 6200,
-      category: "Sport",
-      movementType: "Manual",
-      caseMaterial: "Titanium",
-      dialColor: "Blue",
-      waterResistance: "50m",
-      stockQuantity: 8,
-      productImage: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1000",
-    },
-    {
-      id: 3,
-      watchName: "Seamaster",
-      brand: "Omega",
-      price: 5400,
-      category: "Luxury",
-      movementType: "Automatic",
-      caseMaterial: "Steel",
-      dialColor: "White",
-      waterResistance: "150m",
-      stockQuantity: 3,
-      productImage: "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=1000",
-    },
-    {
-      id: 4,
-      watchName: "Carrera",
-      brand: "Tag Heuer",
-      price: 3200,
-      category: "Sport",
-      movementType: "Automatic",
-      caseMaterial: "Steel",
-      dialColor: "Black",
-      waterResistance: "100m",
-      stockQuantity: 12,
-      productImage: "https://images.unsplash.com/photo-1526045431048-f857369aba09?q=80&w=1000",
-    },
-    {
-      id: 5,
-      watchName: "Black Bay",
-      brand: "Tudor",
-      price: 3800,
-      category: "Vintage",
-      movementType: "Automatic",
-      caseMaterial: "Bronze",
-      dialColor: "Brown",
-      waterResistance: "200m",
-      stockQuantity: 4,
-      productImage: "https://images.unsplash.com/photo-1508685096489-7a669f1bd446?q=80&w=1000",
-    },
-  ];
+  const [items, setItems] = useState([]);
 
-  const [watches] = useState(initialWatches);
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/watch-collection")
+      .then((res) => {
+        setItems(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching products:", err);
+      });
+  }, []);
+
+  console.log(items);
+
+  // const initialWatches = [
+  //   {
+  //     id: 1,
+  //     watchName: "Submariner",
+  //     brand: "Rolex",
+  //     price: 9500,
+  //     category: "Luxury",
+  //     movementType: "Automatic",
+  //     caseMaterial: "Steel",
+  //     dialColor: "Black",
+  //     waterResistance: "300m",
+  //     stockQuantity: 5,
+  //     productImage: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1000",
+  //   },
+  //   {
+  //     id: 2,
+  //     watchName: "Speedmaster",
+  //     brand: "Omega",
+  //     price: 6200,
+  //     category: "Sport",
+  //     movementType: "Manual",
+  //     caseMaterial: "Titanium",
+  //     dialColor: "Blue",
+  //     waterResistance: "50m",
+  //     stockQuantity: 8,
+  //     productImage: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1000",
+  //   },
+  //   {
+  //     id: 3,
+  //     watchName: "Seamaster",
+  //     brand: "Omega",
+  //     price: 5400,
+  //     category: "Luxury",
+  //     movementType: "Automatic",
+  //     caseMaterial: "Steel",
+  //     dialColor: "White",
+  //     waterResistance: "150m",
+  //     stockQuantity: 3,
+  //     productImage: "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=1000",
+  //   },
+  //   {
+  //     id: 4,
+  //     watchName: "Carrera",
+  //     brand: "Tag Heuer",
+  //     price: 3200,
+  //     category: "Sport",
+  //     movementType: "Automatic",
+  //     caseMaterial: "Steel",
+  //     dialColor: "Black",
+  //     waterResistance: "100m",
+  //     stockQuantity: 12,
+  //     productImage: "https://images.unsplash.com/photo-1526045431048-f857369aba09?q=80&w=1000",
+  //   },
+  //   {
+  //     id: 5,
+  //     watchName: "Black Bay",
+  //     brand: "Tudor",
+  //     price: 3800,
+  //     category: "Vintage",
+  //     movementType: "Automatic",
+  //     caseMaterial: "Bronze",
+  //     dialColor: "Brown",
+  //     waterResistance: "200m",
+  //     stockQuantity: 4,
+  //     productImage: "https://images.unsplash.com/photo-1508685096489-7a669f1bd446?q=80&w=1000",
+  //   },
+  // ];
+
+  // const [watches] = useState(initialWatches);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterColor, setFilterColor] = useState("All");
   const [maxPrice, setMaxPrice] = useState(10000);
 
-  const filteredWatches = watches.filter((watch) => {
+  const filteredWatches = items.filter((watch) => {
     const matchesSearch = watch.watchName.toLowerCase().includes(searchTerm.toLowerCase()) || watch.brand.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === "All" || watch.category === filterCategory;
     const matchesColor = filterColor === "All" || watch.dialColor === filterColor;

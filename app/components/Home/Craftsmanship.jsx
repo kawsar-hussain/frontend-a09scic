@@ -6,7 +6,7 @@ const Craftsmanship = () => (
       <div className="relative">
         <div className="bg-white p-6 rounded-[4rem] shadow-xl rotate-[-2deg]">
           <img
-            src="https://images.unsplash.com/photo-1619385029199-ce798f64246a?q=80&w=1000"
+            src="https://cdn.shopify.com/s/files/1/0050/1671/5335/files/gear-train-pocket-watch.png?v=1589313097"
             className="rounded-[3rem] w-full grayscale hover:grayscale-0 transition-all duration-700"
             alt="Macro Watch Gears"
           />

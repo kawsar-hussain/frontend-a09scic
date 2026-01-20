@@ -1,12 +1,38 @@
+"use client";
+
+import axios from "axios";
 import React from "react";
 
 const AddWatch = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+
+    const formData = {
+      watchName: form.watchName.value,
+      brand: form.brand.value,
+      price: Number(form.price.value),
+      category: form.category.value,
+      movementType: form.movementType.value,
+      caseMaterial: form.caseMaterial.value,
+      dialColor: form.dialColor.value,
+      waterResistance: Number(form.waterResistance.value),
+      stockQuantity: Number(form.stockQuantity.value),
+      productImage: form.productImage.value,
+    };
+
+    console.log(formData);
+    axios.post("http://localhost:5000/add-watch", formData).then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <div className="bg-gray-50 py-10">
       <div className="max-w-4xl mx-auto  p-8 bg-white rounded-3xl shadow-md">
         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Add New Watch</h2>
 
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Watch Name */}
           <div className="flex flex-col">
             <label className="mb-2 text-sm font-medium text-gray-700">Watch Name</label>
@@ -30,9 +56,9 @@ const AddWatch = () => {
             <label className="mb-2 text-sm font-medium text-gray-700">Category</label>
             <select name="category" className="select px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D336B] transition">
               <option value="">Select category</option>
-              <option value="executive">The Executive</option>
-              <option value="sport">The Sport</option>
-              <option value="vintage">The Vintage</option>
+              <option value="executive">Luxury</option>
+              <option value="sport">Sport</option>
+              <option value="vintage">Vintage</option>
             </select>
           </div>
 
