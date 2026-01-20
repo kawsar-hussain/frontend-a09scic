@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 
 const Hero = () => (
-  <section className="relative min-h-[85vh] flex items-center bg-[#FDFDFD] overflow-hidden">
+  <section className="py-10 relative min-h-[85vh] flex items-center bg-[#FDFDFD] overflow-hidden">
     <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
       <div className="z-10 order-2 lg:order-1 animate-in fade-in slide-in-from-left duration-1000">
         <div className="flex items-center gap-3 mb-6">
@@ -23,7 +23,7 @@ const Hero = () => (
       </div>
       <div className="relative order-1 lg:order-2">
         <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl transform lg:rotate-3 hover:rotate-0 transition-transform duration-700">
-          <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80" className="w-full h-[500px] lg:h-[650px] object-cover" alt="Luxury Watch Movement" />
+          <img src="https://images.pexels.com/photos/14887214/pexels-photo-14887214.jpeg" className="w-full h-[500px] lg:h-[650px] object-cover" alt="Luxury Watch Movement" />
         </div>
         <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#B38E44]/10 rounded-full blur-3xl"></div>
       </div>

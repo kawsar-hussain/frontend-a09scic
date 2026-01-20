@@ -22,7 +22,7 @@ const AddWatch = () => {
     };
 
     console.log(formData);
-    axios.post("http://localhost:5000/add-watch", formData).then((res) => {
+    axios.post("https://scic12a09.vercel.app/add-watch", formData).then((res) => {
       console.log(res);
     });
   };

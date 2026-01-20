@@ -10,7 +10,7 @@ const Collections = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/watch-collection")
+      .get("https://scic12a09.vercel.app/watch-collection")
       .then((res) => {
         setItems(res.data);
       })

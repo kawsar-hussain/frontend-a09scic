@@ -6,12 +6,12 @@ const Categories = () => {
     {
       title: "The Executive",
       desc: "Automatic Movements",
-      img: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1000",
+      img: "https://images.pexels.com/photos/11973853/pexels-photo-11973853.jpeg",
     },
     {
       title: "The Sport",
       desc: "Durability & Style",
-      img: "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=1000",
+      img: "https://images.pexels.com/photos/17107834/pexels-photo-17107834.jpeg",
     },
     {
       title: "The Vintage",
