@@ -1,8 +1,10 @@
 # WatchAura - Next.js 15 App
 
+![Website Screenshot](public/cover.png)
+
 A modern watch collection application built with Next.js 15 App Router, React 19, and Firebase Authentication.
 
-### [🚀 View Live Demo](https://kawsar-hussain-pawmart.netlify.app/)
+### [🚀 View Live Demo](kawsar-hussain-watchaura.netlify.app)
 
 ## Features
 
